@@ -14,7 +14,6 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         songs = DataAccess.access.getSongs()
-        print(songs[0].name)
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
     }

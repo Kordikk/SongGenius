@@ -19,7 +19,7 @@ public final class RealmConfiguration {
             return
         }
         if let path = Bundle.main.path(forResource: "songs", ofType: "csv") {
-            var contents = try! String(contentsOfFile: path)
+            let contents = try! String(contentsOfFile: path)
             try! realm.write {
                 contents.enumerateLines { (line, _) in
                     let split = line.components(separatedBy: ";")
