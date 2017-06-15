@@ -9,7 +9,7 @@
 import Foundation
 import RealmSwift
 
-//Class used to init Realm db for the first time via AppDelegate and songs.csv file
+//Class used to init Realm db via AppDelegate and songs.csv file
 
 public final class RealmConfiguration {
 
