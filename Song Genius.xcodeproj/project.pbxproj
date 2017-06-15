@@ -12,7 +12,6 @@
 		6B9CE2CF1EF1B9E90041AD28 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6B9CE2CD1EF1B9E90041AD28 /* Main.storyboard */; };
 		6B9CE2D11EF1B9E90041AD28 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6B9CE2D01EF1B9E90041AD28 /* Assets.xcassets */; };
 		6B9CE2D41EF1B9E90041AD28 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6B9CE2D21EF1B9E90041AD28 /* LaunchScreen.storyboard */; };
-		6B9CE2DF1EF1B9E90041AD28 /* Song_GeniusTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B9CE2DE1EF1B9E90041AD28 /* Song_GeniusTests.swift */; };
 		6B9CE2EA1EF1B9E90041AD28 /* Song_GeniusUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B9CE2E91EF1B9E90041AD28 /* Song_GeniusUITests.swift */; };
 		6BC3D1FE1EF1C1F5009354B0 /* RealmConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BC3D1FD1EF1C1F5009354B0 /* RealmConfiguration.swift */; };
 		6BC3D2041EF1C30C009354B0 /* Song.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BC3D2031EF1C30C009354B0 /* Song.swift */; };
@@ -53,7 +52,6 @@
 		6B9CE2D31EF1B9E90041AD28 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6B9CE2D51EF1B9E90041AD28 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6B9CE2DA1EF1B9E90041AD28 /* Song GeniusTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Song GeniusTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		6B9CE2DE1EF1B9E90041AD28 /* Song_GeniusTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Song_GeniusTests.swift; sourceTree = "<group>"; };
 		6B9CE2E01EF1B9E90041AD28 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6B9CE2E51EF1B9E90041AD28 /* Song GeniusUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Song GeniusUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6B9CE2E91EF1B9E90041AD28 /* Song_GeniusUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Song_GeniusUITests.swift; sourceTree = "<group>"; };
@@ -137,7 +135,6 @@
 		6B9CE2DD1EF1B9E90041AD28 /* Song GeniusTests */ = {
 			isa = PBXGroup;
 			children = (
-				6B9CE2DE1EF1B9E90041AD28 /* Song_GeniusTests.swift */,
 				6B9CE2E01EF1B9E90041AD28 /* Info.plist */,
 				6BC3D2171EF272AA009354B0 /* DataAccessTests.swift */,
 				6BC3D2191EF2894B009354B0 /* RealmConfigurationTests.swift */,
@@ -448,7 +445,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6B9CE2DF1EF1B9E90041AD28 /* Song_GeniusTests.swift in Sources */,
 				6BC3D21A1EF2894B009354B0 /* RealmConfigurationTests.swift in Sources */,
 				6BC3D2181EF272AA009354B0 /* DataAccessTests.swift in Sources */,
 			);
