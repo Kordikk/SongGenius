@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController, UITableViewDataSource {
+class LocalSongsViewController: UIViewController, UITableViewDataSource {
     
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var tableView: UITableView!
@@ -40,10 +40,10 @@ class ViewController: UIViewController, UITableViewDataSource {
 
 }
 
-extension ViewController: UITableViewDelegate {
+extension LocalSongsViewController: UITableViewDelegate {
     
 }
 
-extension ViewController: UISearchBarDelegate {
+extension LocalSongsViewController: UISearchBarDelegate {
     
 }
