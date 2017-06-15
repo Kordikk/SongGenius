@@ -1,3 +1,4 @@
 language: swift
 xcode_project: Song Genius.xcworkspace
 xcode_scheme: Song GeniusTests
+osx_image: xcode8.3
