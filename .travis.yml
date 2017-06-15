@@ -3,4 +3,4 @@ language: objective-c
 xcode_project: Song Genius.xcworkspace
 xcode_scheme: Song GeniusTests
 script:
-- xcodebuild -scheme 'Song GeniusTests' -workspace  'Song Genius.xcworkspace' -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 6S,OS=10.3' build test
+- xcodebuild -scheme 'Song GeniusTests' -workspace  'Song Genius.xcworkspace' -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 6S,OS=10.3' CODE_SIGNING_REQUIRED=NO build test | xcpretty
