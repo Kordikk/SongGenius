@@ -1,4 +1,6 @@
-language: swift
+osx_image: xcode8.3
+language: objective-c
 xcode_project: Song Genius.xcworkspace
 xcode_scheme: Song GeniusTests
-osx_image: xcode8.3
+script:
+- xcodebuild -scheme 'Song GeniusTests' -workspace  'Song Genius.xcworkspace' -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 6S,OS=10.3' build test
