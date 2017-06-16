@@ -1,5 +1,6 @@
 platform :ios, "10.0"
 
+workspace 'Song Genius'
 
 target 'Song Genius' do
   # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
@@ -7,7 +8,9 @@ target 'Song Genius' do
 
   pod 'RealmSwift'
   pod 'Alamofire'
-
+  pod 'RxSwift', '~> 3.0'
+  pod 'RxCocoa', '~> 3.0'
+  pod 'SwiftyJSON'
   target 'Song GeniusTests' do
   use_frameworks!
 

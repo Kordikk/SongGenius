@@ -15,33 +15,36 @@ class LocalSongsViewController: UIViewController, UITableViewDataSource {
     var songs = [Song]()
 
     override func viewDidLoad() {
+        super.viewDidLoad()
         songs = DataAccess.access.getSongs()
         tableView.dataSource = self
         searchBar.delegate = self
         tableView.delegate = self
-        super.viewDidLoad()
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
+    @IBAction func goBack(_ sender: Any) {
+        dismiss(animated: true, completion: nil)
     }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return songs.count
-    }
-
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell()
-        cell.textLabel!.text = songs[indexPath.row].primaryKey
-        return cell
-    }
-
 }
 
 extension LocalSongsViewController: UITableViewDelegate {
     
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return songs.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = self.tableView.dequeueReusableCell(withIdentifier: "localSongsCell") as! LocalSongsCell
+        let song = songs[indexPath.row]
+        cell.title.text = "\(song.artist) - \(song.name)"
+        cell.releaseYear.text = song.releaseYear
+        return cell
+    }
+    
 }
 
 extension LocalSongsViewController: UISearchBarDelegate {
+    
+    
     
 }
