@@ -11,24 +11,20 @@ import UIKit
 
 protocol SongRenderableType {
     var title: String { get }
-    var bottomText: String { get }
-    var image: UIImage { get }
+    var releaseYear: String { get }
 }
 
 struct SongRenderable: SongRenderableType {
     let title: String
-    let bottomText: String
-    let image: UIImage
+    let releaseYear: String
     
-    init(title: String, bottomText: String, image: UIImage = UIImage()) {
+    init(title: String, bottomText: String) {
         self.title = title
-        self.bottomText = bottomText
-        self.image = image
+        self.releaseYear = bottomText
     }
     
-    init(song: Song, image: UIImage = UIImage()) {
+    init(song: Song) {
         self.title = song.name
-        self.bottomText = "\(song.artist) / \(song.releaseYear))"
-        self.image = image
+        self.releaseYear = "\(song.artist) / \(song.releaseYear))"
     }
 }

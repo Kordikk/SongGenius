@@ -9,6 +9,8 @@
 import Foundation
 import Alamofire
 import SwiftyJSON
+import RxCocoa
+import RxSwift
 
 enum Endpoint {
     case getSongs(forTerm: String)
@@ -31,7 +33,7 @@ enum Endpoint {
     }
 }
 
-final class API {
+class API {
     // country = pl    because we're in Poland and we want Polish market
     // limit = 100     seems reasonable
     // media = music   we obviously want music only (not musicVideos, software etc)
@@ -40,24 +42,56 @@ final class API {
     
     static let baseURL = URL(string: "https://itunes.apple.com/search?country=pl&limit=100&entity=song&media=music&term=")
     
-    class func request(_ endpoint: Endpoint, completion: @escaping ((Bool, JSON?) -> Void)) {
-        guard let url = URL(string: endpoint.url, relativeTo: API.baseURL) else { fatalError() }
-        
+    func request(_ endpoint: Endpoint, completion: @escaping ((Bool, [Song]?) -> Void)) -> DataRequest {
+        let url = URL(string: "https://itunes.apple.com/search?country=pl&limit=100&entity=song&media=music&term=\(endpoint.url)")!
+        print("request for \(url)")
         switch endpoint {
         case .getSongs:
-            Alamofire.request(url, method: endpoint.method).responseJSON { response in
+            let request = Alamofire.request(url, method: endpoint.method)
+            request.responseJSON { response in
                 switch response.result {
                 case .success(let value):
-                    guard let json = value as? JSON
-                        else { return completion(false, nil) }
-                    completion(true, json)
+                    let json = JSON.init(value)
+                    var ret = [Song]()
+                    print(json)
+                    if(json["resultCount"].int! > 0) {
+                        for songJSON in json["results"].array! {
+                            let artist = songJSON["artistName"].string!
+                            let name = songJSON["trackName"].string!
+                            let releaseDate = songJSON["releaseDate"].string!
+                            let strIndex = releaseDate.index(releaseDate.startIndex, offsetBy: 4)
+                            let releaseYear = releaseDate.substring(to: strIndex)
+                            ret.append(Song(name: name, artist: artist, releaseYear: releaseYear))
+                        }
+                    }
+                    completion(true, ret)
                     
                 case .failure(let error):
                     print("ERROR: \(error.localizedDescription)")
                     completion(false, nil)
                 }
             }
+            return request
         }
     }
     
+}
+
+extension API: ReactiveCompatible {}
+
+extension Reactive where Base: API {
+    func request(_ endpoint: Endpoint) -> Observable<[Song]> {
+        return Observable.create { observer in
+            let request = self.base.request( endpoint, completion: { success, songs in
+                if(success) {
+                    observer.onNext(songs!)
+                } else {
+                    observer.onNext([Song]())
+                }
+            })
+            return Disposables.create {
+                request.cancel()
+            }
+            }.observeOn(MainScheduler.instance)
+    }
 }

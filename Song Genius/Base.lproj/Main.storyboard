@@ -50,6 +50,46 @@
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="MPi-HY-d8S">
                                 <rect key="frame" x="0.0" y="108" width="375" height="559"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="ITunesSongsCell" rowHeight="48" id="wUa-Kd-sPq" customClass="ITunesSongsCell" customModule="Song_Genius" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="28" width="375" height="48"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="wUa-Kd-sPq" id="TR0-ev-r8b">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="47.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Very cool song by Very cool band hehehehe" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QoD-mz-NiC">
+                                                    <rect key="frame" x="16" y="6" width="279" height="35"/>
+                                                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="18"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1997" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="O2o-1d-XlW">
+                                                    <rect key="frame" x="311" y="6" width="48" height="35"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="48" id="xGQ-N7-1jX"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="18"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailing" secondItem="O2o-1d-XlW" secondAttribute="trailing" constant="16" id="16V-Dh-wfz"/>
+                                                <constraint firstItem="QoD-mz-NiC" firstAttribute="top" secondItem="TR0-ev-r8b" secondAttribute="top" constant="6" id="JLy-ke-3mg"/>
+                                                <constraint firstItem="QoD-mz-NiC" firstAttribute="leading" secondItem="TR0-ev-r8b" secondAttribute="leading" constant="16" id="PPE-Gz-Brd"/>
+                                                <constraint firstItem="O2o-1d-XlW" firstAttribute="leading" secondItem="QoD-mz-NiC" secondAttribute="trailing" constant="16" id="Q33-9V-Cdv"/>
+                                                <constraint firstItem="O2o-1d-XlW" firstAttribute="top" secondItem="TR0-ev-r8b" secondAttribute="top" constant="6" id="Zm7-ZF-tvd"/>
+                                                <constraint firstAttribute="bottom" secondItem="QoD-mz-NiC" secondAttribute="bottom" constant="6" id="cxk-Jr-qYE"/>
+                                                <constraint firstAttribute="bottom" secondItem="O2o-1d-XlW" secondAttribute="bottom" constant="6" id="oBZ-jC-oCt"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="releaseYear" destination="O2o-1d-XlW" id="a8W-48-TA6"/>
+                                            <outlet property="title" destination="QoD-mz-NiC" id="TLm-e8-J0z"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </prototypes>
                             </tableView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -74,6 +114,24 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gDw-2Y-3YH" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="608.79999999999995" y="-671.51424287856082"/>
+        </scene>
+        <!--showNoRx-->
+        <scene sceneID="Wfq-XJ-RfI">
+            <objects>
+                <viewController title="showNoRx" id="9hJ-oK-4Zh" customClass="NoRxITunesViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Q6I-wH-xjI"/>
+                        <viewControllerLayoutGuide type="bottom" id="PBl-VD-2jZ"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="QXZ-O0-xgW">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="irl-gf-5ZK" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="609" y="-1442"/>
         </scene>
         <!--Local Songs View Controller-->
         <scene sceneID="tne-QT-ifu">
@@ -233,6 +291,7 @@
                     <connections>
                         <segue destination="BYZ-38-t0r" kind="show" identifier="showLocalSongsViewController" id="gjw-av-2Bu"/>
                         <segue destination="Udc-Bm-f3o" kind="show" identifier="showITunesSongsViewController" id="xXa-rD-jdl"/>
+                        <segue destination="9hJ-oK-4Zh" kind="show" id="zuP-V8-fIC"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jVD-fw-W09" userLabel="First Responder" sceneMemberID="firstResponder"/>

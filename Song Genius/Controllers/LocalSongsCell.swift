@@ -13,8 +13,4 @@ class LocalSongsCell: UITableViewCell {
     @IBOutlet weak var title: UILabel!
     @IBOutlet weak var releaseYear: UILabel!
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
-    }
-    
 }
