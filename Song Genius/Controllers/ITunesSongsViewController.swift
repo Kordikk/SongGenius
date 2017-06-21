@@ -45,6 +45,9 @@ class ITunesSongsViewController: UIViewController, UITableViewDelegate {
         
         shouldShowCancelButton.subscribe(onNext: { [searchBar] shouldShow in
             searchBar?.showsCancelButton = shouldShow
+            if(!shouldShow){
+                
+            }
         }).addDisposableTo(disposeBag)
         
         searchBar.rx.cancelButtonClicked.subscribe(onNext: { [searchBar] in
@@ -54,6 +57,11 @@ class ITunesSongsViewController: UIViewController, UITableViewDelegate {
         songs.bind(to: tableView.rx.items(cellIdentifier: "ITunesSongsCell", cellType: ITunesSongsCell.self)) { index, song, cell in
             cell.render(songRenderable: song)
             }.addDisposableTo(disposeBag)
+    }
+    
+    
+    @IBAction func goBack(_ sender: Any) {
+        self.dismiss(animated: true, completion: nil)
     }
     
     private lazy var searchText: Observable<String> = {

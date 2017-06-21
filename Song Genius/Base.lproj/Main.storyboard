@@ -31,7 +31,7 @@
                                         <barButtonItem key="leftBarButtonItem" title="Back" id="86X-KP-fjj">
                                             <color key="tintColor" cocoaTouchSystemColor="darkTextColor"/>
                                             <connections>
-                                                <action selector="goBack:" destination="Udc-Bm-f3o" id="xgI-bW-z1u"/>
+                                                <action selector="goBack:" destination="Udc-Bm-f3o" id="W5b-dA-0ID"/>
                                             </connections>
                                         </barButtonItem>
                                         <barButtonItem key="rightBarButtonItem" title="Sort" id="JEy-CD-Yj3">
@@ -115,15 +115,15 @@
             </objects>
             <point key="canvasLocation" x="608.79999999999995" y="-671.51424287856082"/>
         </scene>
-        <!--showNoRx-->
+        <!--No Rx iTunes View Controller-->
         <scene sceneID="Wfq-XJ-RfI">
             <objects>
-                <viewController title="showNoRx" id="9hJ-oK-4Zh" customClass="NoRxITunesViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="NoRxITunesViewController" id="9hJ-oK-4Zh" customClass="NoRxITunesViewController" customModule="Song_Genius" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Q6I-wH-xjI"/>
                         <viewControllerLayoutGuide type="bottom" id="PBl-VD-2jZ"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="QXZ-O0-xgW">
+                    <view key="view" contentMode="scaleToFill" id="QXZ-O0-xgW" customClass="NoRx">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -160,6 +160,9 @@
                                         </barButtonItem>
                                         <barButtonItem key="rightBarButtonItem" title="Sort" id="cWY-gD-p5i">
                                             <color key="tintColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <connections>
+                                                <action selector="sortBy:" destination="BYZ-38-t0r" id="nkD-H4-bPA"/>
+                                            </connections>
                                         </barButtonItem>
                                     </navigationItem>
                                 </items>
@@ -265,12 +268,13 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BbN-cR-Q4X">
-                                <rect key="frame" x="165" y="374" width="45" height="30"/>
+                                <rect key="frame" x="326" y="632" width="33" height="15"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="45" id="82U-9J-knS"/>
-                                    <constraint firstAttribute="height" constant="30" id="smj-zV-3s5"/>
+                                    <constraint firstAttribute="width" constant="33" id="7qY-e8-Ssi"/>
+                                    <constraint firstAttribute="height" constant="15" id="wXZ-F0-fkq"/>
                                 </constraints>
-                                <state key="normal" title="iTunes"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="7"/>
+                                <state key="normal" title="BETA RX"/>
                                 <connections>
                                     <action selector="goToITunesSongsButton:" destination="B6H-Kd-CaO" eventType="touchUpInside" id="h4Z-w2-YF3"/>
                                 </connections>
@@ -279,24 +283,22 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="unh-uE-0XX" secondAttribute="trailing" constant="169" id="I4W-Hw-Ipm"/>
-                            <constraint firstItem="BbN-cR-Q4X" firstAttribute="leading" secondItem="0L3-bq-rhS" secondAttribute="leading" constant="165" id="RhB-5I-6Kh"/>
                             <constraint firstItem="unh-uE-0XX" firstAttribute="top" secondItem="zBB-qN-HmV" secondAttribute="bottom" constant="298" id="Ryr-KQ-oXz"/>
-                            <constraint firstItem="BbN-cR-Q4X" firstAttribute="top" secondItem="unh-uE-0XX" secondAttribute="bottom" constant="26" id="XaE-YS-zuu"/>
                             <constraint firstItem="nv8-jS-2Hg" firstAttribute="top" secondItem="unh-uE-0XX" secondAttribute="bottom" constant="319" id="aEh-WI-mjr"/>
-                            <constraint firstItem="nv8-jS-2Hg" firstAttribute="top" secondItem="BbN-cR-Q4X" secondAttribute="bottom" constant="263" id="bBM-uJ-TFm"/>
-                            <constraint firstAttribute="trailing" secondItem="BbN-cR-Q4X" secondAttribute="trailing" constant="165" id="fTt-gI-YZD"/>
+                            <constraint firstItem="nv8-jS-2Hg" firstAttribute="top" secondItem="BbN-cR-Q4X" secondAttribute="bottom" constant="20" id="j72-Ww-Jr4"/>
                             <constraint firstItem="unh-uE-0XX" firstAttribute="leading" secondItem="0L3-bq-rhS" secondAttribute="leading" constant="169" id="oE7-ZE-iLP"/>
+                            <constraint firstAttribute="trailing" secondItem="BbN-cR-Q4X" secondAttribute="trailing" constant="16" id="u5e-j8-1mC"/>
                         </constraints>
                     </view>
                     <connections>
                         <segue destination="BYZ-38-t0r" kind="show" identifier="showLocalSongsViewController" id="gjw-av-2Bu"/>
                         <segue destination="Udc-Bm-f3o" kind="show" identifier="showITunesSongsViewController" id="xXa-rD-jdl"/>
-                        <segue destination="9hJ-oK-4Zh" kind="show" id="zuP-V8-fIC"/>
+                        <segue destination="9hJ-oK-4Zh" kind="show" identifier="showNoRxITunesViewController" id="zuP-V8-fIC"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jVD-fw-W09" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-452" y="-264"/>
+            <point key="canvasLocation" x="-452" y="-264.01799100449779"/>
         </scene>
     </scenes>
 </document>

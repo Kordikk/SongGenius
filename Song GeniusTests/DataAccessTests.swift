@@ -69,7 +69,7 @@ class DataAccessTests: XCTestCase {
         //THEN
         
         wait(for: [(MockDataAccess.exp)!], timeout: 0.1)
-        XCTAssert(db[1].releaseYear == "1997")
+        XCTAssert(db[0].releaseYear == "1997" && db[db.count-1].releaseYear == "1997")
     }
     
 }
