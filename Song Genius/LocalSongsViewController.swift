@@ -15,6 +15,9 @@ class LocalSongsViewController: UIViewController, UITableViewDataSource {
     var songs = [Song]()
     var filtered = [Song]()
     var searchActive = false
+    var sortedByNameAscending = false
+    var sortedByArtistAscending = false
+    var sortedByReleaseYearAscending = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,23 +35,57 @@ class LocalSongsViewController: UIViewController, UITableViewDataSource {
         let alertController = UIAlertController(title: "Filters", message:
             "You can choose one way of sorting songs.", preferredStyle: .alert)
         alertController.addAction(UIAlertAction(title: "By name", style: .default, handler: { [unowned self] _ in
-            self.songs.sort{$0.name < $1.name}
+            if(self.sortedByNameAscending) {
+                self.songs.sort{$0.name.lowercased() < $1.name.lowercased()}
+            if(self.searchActive) {
+                self.filtered.sort{$0.name.lowercased() < $1.name.lowercased()}
+                }
+            } else {
+                self.songs.sort{$0.name.lowercased() > $1.name.lowercased()}
+                if(self.searchActive) {
+                    self.filtered.sort{$0.name.lowercased() > $1.name.lowercased()}
+                }
+            }
+            self.sortedByNameAscending = !self.sortedByNameAscending
             self.tableView.reloadSections(IndexSet(integer: 0), with: .fade)
         }))
 
         alertController.addAction(UIAlertAction(title: "By artist", style: .default, handler: { [unowned self] _ in
-            self.songs.sort{$0.artist < $1.artist}
+            if(self.sortedByArtistAscending) {
+            self.songs.sort{$0.artist.lowercased() < $1.artist.lowercased()}
+            if(self.searchActive) {
+                self.filtered.sort{$0.artist.lowercased() < $1.artist.lowercased()}
+                }
+            } else {
+                self.songs.sort{$0.artist.lowercased() > $1.artist.lowercased()}
+                if(self.searchActive) {
+                    self.filtered.sort{$0.artist.lowercased() > $1.artist.lowercased()}
+                }
+
+            }
+            self.sortedByArtistAscending = !self.sortedByArtistAscending
             self.tableView.reloadSections(IndexSet(integer: 0), with: .fade)
         }))
+        
         alertController.addAction(UIAlertAction(title: "By year", style: .default, handler: { [unowned self] _ in
+            if(self.sortedByReleaseYearAscending) {
             self.songs.sort{$0.releaseYear < $1.releaseYear}
+            if(self.searchActive) {
+                self.filtered.sort{$0.releaseYear < $1.releaseYear}
+                }
+            } else {
+                self.songs.sort{$0.releaseYear > $1.releaseYear}
+                if(self.searchActive) {
+                    self.filtered.sort{$0.releaseYear > $1.releaseYear}
+                }
+            }
+            self.sortedByReleaseYearAscending = !self.sortedByReleaseYearAscending
             self.tableView.reloadSections(IndexSet(integer: 0), with: .fade)
         }))
         self.present(alertController, animated: true, completion: nil)
     }
     
     func dismissKeyboard(){
-        searchActive = false
         view.endEditing(true)
     }
     
@@ -103,14 +140,6 @@ extension LocalSongsViewController: UISearchBarDelegate {
 
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         dismissKeyboard()
-    }
-    
-    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-        searchActive = false
-    }
-    
-    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
-        searchActive = false
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {

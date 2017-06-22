@@ -61,6 +61,7 @@ class ITunesSongsViewController: UIViewController, UITableViewDelegate {
     
     
     @IBAction func goBack(_ sender: Any) {
+        Sound.stopAll()
         self.dismiss(animated: true, completion: nil)
     }
     

@@ -15,13 +15,15 @@ public class Song: Object {
     dynamic var artist: String = ""
     dynamic var releaseYear: String = ""
     dynamic var primaryKey: String = ""
+    dynamic var url: String = ""
     
-    convenience init(name: String, artist: String, releaseYear: String) {
+    convenience init(name: String, artist: String, releaseYear: String, url: String = "") {
         self.init()
         self.name = name
         self.artist = artist
         self.releaseYear = releaseYear
         self.primaryKey = "\(self.name) by \(self.artist)"
+        self.url = url
     }
     
 }

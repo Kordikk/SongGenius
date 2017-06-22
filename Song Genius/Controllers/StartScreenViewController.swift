@@ -11,9 +11,11 @@ import UIKit
 
 class StartScreenViewController: UIViewController {
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        let pastelView = PastelView(frame: view.bounds)
+        let pastelView = PastelView(frame: CGRect(x: 0, y: 0, width: 800, height: 800))
+        view.insertSubview(pastelView, at: 0)
         pastelView.startPastelPoint = .bottomLeft
         pastelView.endPastelPoint = .topRight
         pastelView.animationDuration = 1.0
@@ -26,7 +28,6 @@ class StartScreenViewController: UIViewController {
             UIColor(red: 244/255, green: 143/255, blue: 177/255, alpha: 1.0)
             ])
         pastelView.startAnimation()
-        view.insertSubview(pastelView, at: 0)
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -39,7 +40,12 @@ class StartScreenViewController: UIViewController {
     }
     
     @IBAction func goToITunesSongsButton(_ sender: Any) {
+        Sound.play(file: "xfiles.mp3")
         performSegue(withIdentifier: "showITunesSongsViewController", sender: sender)
+    }
+    
+    @IBAction func showNoRxITunesViewController(_ sender: Any) {
+        performSegue(withIdentifier: "showNoRxITunesViewController", sender: sender)
     }
 
 }
