@@ -41,7 +41,6 @@ final class API {
     
     static func request(_ endpoint: Endpoint, completion: @escaping ((Bool, [Song]?) -> Void)) -> DataRequest {
         let url = URL(string: "https://itunes.apple.com/search?country=pl&limit=50&entity=song&media=music&term=\(endpoint.url)")!
-        print("request for \(url)")
         switch endpoint {
         case .getSongs:
             let request = Alamofire.request(url, method: endpoint.method)
@@ -50,7 +49,6 @@ final class API {
                 case .success(let value):
                     let json = JSON.init(value)
                     var ret = [Song]()
-                    print(json)
                     if(json["resultCount"].int! > 0) {
                         for songJSON in json["results"].array! {
                             let artist = songJSON["artistName"].string!
@@ -65,7 +63,7 @@ final class API {
                     completion(true, ret)
                     
                 case .failure(let error):
-                    print("ERROR: \(error.localizedDescription)")
+                    print("ERROR during request: \(error.localizedDescription)")
                     completion(false, nil)
                 }
             }
@@ -74,6 +72,11 @@ final class API {
     }
     
 }
+
+
+
+
+//Maybe RxSwift will be fixed one day 😅
 
 extension API: ReactiveCompatible {}
 

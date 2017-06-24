@@ -29,8 +29,29 @@ class Song_GeniusUITests: XCTestCase {
     }
     
     func testExample() {
-        // Use recording to get started writing UI tests.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+        XCUIDevice.shared().orientation = .portrait
+        XCUIDevice.shared().orientation = .portrait
+        XCUIDevice.shared().orientation = .landscapeLeft
+        XCUIDevice.shared().orientation = .landscapeRight
+        
+        let app = XCUIApplication()
+        app.otherElements.containing(.image, identifier:"logo").children(matching: .other).element.tap()
+        app.buttons["BETA RX"].tap()
+        app.navigationBars["iTunes Songs"].buttons["Back"].tap()
+        app.buttons["iTunes"].tap()
+        XCUIDevice.shared().orientation = .portrait
+        XCUIDevice.shared().orientation = .landscapeLeft
+        
+        let searchForMin2CharactersSpacesNotIncludedSearchField = app.searchFields["Search for min 2 characters (spaces not included)"]
+        searchForMin2CharactersSpacesNotIncludedSearchField.tap()
+        searchForMin2CharactersSpacesNotIncludedSearchField.typeText("Adel")
+        XCUIDevice.shared().orientation = .portrait
+        searchForMin2CharactersSpacesNotIncludedSearchField.tap()
+        searchForMin2CharactersSpacesNotIncludedSearchField.typeText("Cigarettes")
+        app.keys["spacja"].tap()
+        searchForMin2CharactersSpacesNotIncludedSearchField.typeText(" aft")
+        searchForMin2CharactersSpacesNotIncludedSearchField.buttons["Clear text"].tap()
+        
     }
     
 }

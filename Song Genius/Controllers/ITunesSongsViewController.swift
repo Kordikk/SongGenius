@@ -89,7 +89,7 @@ class ITunesSongsViewController: UIViewController, UITableViewDelegate {
     
     private lazy var term: Observable<String> = {
         return self.searchText
-            .debounce(0.7, scheduler: MainScheduler.instance) //0.7 cause API limits number of calls per minute to 25
+            .debounce(0.45, scheduler: MainScheduler.instance) //0.7 cause API limits number of calls per minute to 25
             .filter(self.filterTerm(containsLessCharactersThan: 3)) // min 3 chars for the same reason as ^
     }()
     

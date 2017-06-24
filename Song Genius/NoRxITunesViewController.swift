@@ -13,11 +13,10 @@ class NoRxITunesViewController: UIViewController, UITableViewDataSource{
     
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var tableView: UITableView!
-    var songs = [Song]()
-    let api = API()
-    var sortedByNameAscending = false
-    var sortedByArtistAscending = false
-    var sortedByReleaseYearAscending = false
+    fileprivate var sortedByNameAscending = false
+    fileprivate var sortedByArtistAscending = false
+    fileprivate var sortedByReleaseYearAscending = false
+    fileprivate let songsManager = SongsManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,17 +34,14 @@ class NoRxITunesViewController: UIViewController, UITableViewDataSource{
     }
     
     func updateTableView(searchText: String) {
-        songs.removeAll()
-        _ = API.request(.getSongs(forTerm: searchText)){ success, songs in
-            if(success) {
-                for song in songs! {
-                    self.songs.append(song)
-                }
-                self.tableView.reloadSections(IndexSet(integer: 0), with: .fade)
-            } else {
-                let alertController = UIAlertController(title: "ERROR", message: "No results or there was a connection problem", preferredStyle: .alert)
-                alertController.addAction(UIAlertAction(title: "Dismiss", style: .default, handler: nil))
-                self.present(alertController, animated: true, completion: nil)
+        songsManager.removeAll()
+        songsManager.setSongsFromITunes(searchText){ success in
+        if(success) {
+            self.tableView.reloadSections(IndexSet(integer: 0), with: .fade)
+        } else {
+            let alertController = UIAlertController(title: "ERROR", message: "No results or there was a connection problem", preferredStyle: .alert)
+            alertController.addAction(UIAlertAction(title: "Dismiss", style: .default, handler: nil))
+            self.present(alertController, animated: true, completion: nil)
             }
         }
     }
@@ -55,9 +51,9 @@ class NoRxITunesViewController: UIViewController, UITableViewDataSource{
             "You can choose one way of sorting songs.", preferredStyle: .alert)
         alertController.addAction(UIAlertAction(title: "By name", style: .default, handler: { [unowned self] _ in
             if(self.sortedByNameAscending) {
-                self.songs.sort{$0.name.lowercased() < $1.name.lowercased()}
+                self.songsManager.sort(.byNameDescending)
             } else {
-                self.songs.sort{$0.name.lowercased() > $1.name.lowercased()}
+                self.songsManager.sort(.byNameAscending)
             }
             self.sortedByNameAscending = !self.sortedByNameAscending
             self.tableView.reloadSections(IndexSet(integer: 0), with: .fade)
@@ -65,9 +61,9 @@ class NoRxITunesViewController: UIViewController, UITableViewDataSource{
         
         alertController.addAction(UIAlertAction(title: "By artist", style: .default, handler: { [unowned self] _ in
             if(self.sortedByArtistAscending) {
-                self.songs.sort{$0.artist.lowercased() < $1.artist.lowercased()}
+                self.songsManager.sort(.byArtistDescending)
             } else {
-                self.songs.sort{$0.artist.lowercased() > $1.artist.lowercased()}
+                self.songsManager.sort(.byArtistAscending)
             }
             self.sortedByArtistAscending = !self.sortedByArtistAscending
             self.tableView.reloadSections(IndexSet(integer: 0), with: .fade)
@@ -75,9 +71,9 @@ class NoRxITunesViewController: UIViewController, UITableViewDataSource{
         
         alertController.addAction(UIAlertAction(title: "By year", style: .default, handler: { [unowned self] _ in
             if(self.sortedByReleaseYearAscending) {
-                self.songs.sort{$0.releaseYear < $1.releaseYear}
+                self.songsManager.sort(.byReleaseYearDescending)
             } else {
-                self.songs.sort{$0.releaseYear > $1.releaseYear}
+                self.songsManager.sort(.byReleaseYearAscending)
             }
             self.sortedByReleaseYearAscending = !self.sortedByReleaseYearAscending
             self.tableView.reloadSections(IndexSet(integer: 0), with: .fade)
@@ -90,12 +86,12 @@ class NoRxITunesViewController: UIViewController, UITableViewDataSource{
 extension NoRxITunesViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return songs.count
+        return songsManager.getCount()
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = self.tableView.dequeueReusableCell(withIdentifier: "noRxITunesSongCell") as! NoRxITunesSongsCell
-        let song = songs[indexPath.row]
+        let song = songsManager.getSong(indexPath.row)
         cell.title.text = "\(song.artist) - \(song.name)"
         cell.releaseYear.text = song.releaseYear
         return cell
@@ -106,10 +102,10 @@ extension NoRxITunesViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let song = songs[indexPath.row]
+        let song = songsManager.getSong(indexPath.row)
         let alertController = UIAlertController(title: "Song", message:
             "You've chosen a song \(song.primaryKey) released in \(song.releaseYear ).", preferredStyle: UIAlertControllerStyle.alert)
-        alertController.addAction(UIAlertAction(title: "Ok, cool", style: UIAlertActionStyle.default,handler: nil))
+        alertController.addAction(UIAlertAction(title: "Ok, cool", style: UIAlertActionStyle.default, handler: nil))
         alertController.addAction(UIAlertAction(title: "Go to iTunes", style: .default, handler: { _ in
             UIApplication.shared.open(URL(string: song.url)!, options: [:], completionHandler: nil)
         }))
@@ -128,7 +124,7 @@ extension NoRxITunesViewController: UISearchBarDelegate {
             perform(#selector(self.updateTableView(searchText:)), with: searchText, afterDelay: 0.45) //API limited calls so we can't filter during typing cause that would result in A LOT
         } else {
             NSObject.cancelPreviousPerformRequests(withTarget: self)
-            songs.removeAll()
+            songsManager.removeAll()
             self.tableView.reloadSections(IndexSet(integer: 0), with: .fade)
         }
     }

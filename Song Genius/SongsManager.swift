@@ -16,15 +16,17 @@ enum Sorting {
 }
 
 final class SongsManager {
+    
+    private let base = DataAccess.access.getSongs()
 
     private var songs = [Song]()
     
-    public func clearAllSongs() {
+    public func removeAll() {
         songs.removeAll()
     }
     
     public func loadSongsFromLocal() {
-        songs = DataAccess.access.getSongs()
+        songs = base
     }
     
     public func sort(_ by: Sorting) {
@@ -63,12 +65,29 @@ final class SongsManager {
     }
     
     public func setSongs(_ forTerm: String) { //search "engine"
-        songs = songs.filter { (song: Song) -> Bool in
-            let term = clearText(forTerm).lowercased()
-            let isNameMatching = clearText(song.name).lowercased().contains(term.lowercased())
-            let isArtistMatching = clearText(song.artist).lowercased().contains(term.lowercased())
-            let isReleaseYearMatching = clearText(song.releaseYear).contains(term)
-            return isNameMatching || isArtistMatching || isReleaseYearMatching
+        songs = base
+        if(forTerm != "") {
+            songs = songs.filter { (song: Song) -> Bool in
+                let term = clearText(forTerm).lowercased()
+                let isNameMatching = clearText(song.name).lowercased().contains(term.lowercased())
+                let isArtistMatching = clearText(song.artist).lowercased().contains(term.lowercased())
+                let isReleaseYearMatching = clearText(song.releaseYear).contains(term)
+                return isNameMatching || isArtistMatching || isReleaseYearMatching
+            }
+        }
+    }
+    
+    public func setSongsFromITunes(_ forTerm: String, completion: @escaping ((Bool) -> Void)) {
+        removeAll()
+        let keyword = clearText(forTerm)
+        
+        _ = API.request(.getSongs(forTerm: keyword)){ success, songs in
+            if(success) {
+                for song in songs! {
+                    self.songs.append(song)
+                }
+            }
+            completion(success)
         }
     }
     

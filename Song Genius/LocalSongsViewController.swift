@@ -74,6 +74,11 @@ class LocalSongsViewController: UIViewController, UITableViewDataSource {
     
 }
 
+
+
+
+//Extenstion for TableView Delegate
+
 extension LocalSongsViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -95,7 +100,7 @@ extension LocalSongsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let song = songsManager.getSong(indexPath.row)
         let alertController = UIAlertController(title: "Song", message:
-            "You've chosen a song \(song.primaryKey) released in \(song.releaseYear == "" ? song.releaseYear : "year only artists knows : (").", preferredStyle: UIAlertControllerStyle.alert)
+            "You've chosen a song \(song.primaryKey) released in \(song.releaseYear != "" ? song.releaseYear : "year only artists knows : (").", preferredStyle: UIAlertControllerStyle.alert)
         alertController.addAction(UIAlertAction(title: "Ok, cool", style: UIAlertActionStyle.default,handler: nil))
         
         self.present(alertController, animated: true, completion: {
@@ -105,6 +110,11 @@ extension LocalSongsViewController: UITableViewDelegate {
 
 }
 
+
+
+
+//Extensions for SearchBar Delegate
+
 extension LocalSongsViewController: UISearchBarDelegate {
 
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
@@ -112,11 +122,7 @@ extension LocalSongsViewController: UISearchBarDelegate {
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        if(searchText == "") {
-            songsManager.loadSongsFromLocal()
-        } else {
             songsManager.setSongs(searchText)
-        }
         self.tableView.reloadSections(IndexSet(integer: 0), with: .fade)
     }
     
