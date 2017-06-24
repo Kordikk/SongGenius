@@ -18,12 +18,7 @@ enum Endpoint {
     var url: String {
         switch self {
         case .getSongs(let forTerm):
-            var forTermTrimmed = forTerm.replacingOccurrences(of: "&", with: "")
-            forTermTrimmed = forTermTrimmed.replacingOccurrences(of: "'", with: "")
-            forTermTrimmed = forTermTrimmed.replacingOccurrences(of: "!", with: "")
-            forTermTrimmed = forTermTrimmed.replacingOccurrences(of: "-", with: "")
-            forTermTrimmed = forTermTrimmed.replacingOccurrences(of: "/", with: "")
-            return forTermTrimmed.replacingOccurrences(of: " ", with: "+")
+            return forTerm.replacingOccurrences(of: " ", with: "+")
         }
     }
     
@@ -37,16 +32,14 @@ enum Endpoint {
     }
 }
 
-class API {
+final class API {
     // country = pl    because we're in Poland and we want Polish market
     // limit = 50     seems reasonable
     // media = music   we obviously want music only (not musicVideos, software etc)
     // entity = song   we want songs returned (not albums, artist only etc)
     // term = ??       user's input here (with & removed and spaces changed to "&"
     
-    static let baseURL = URL(string: "https://itunes.apple.com/search?country=pl&limit=100&entity=song&media=music&term=")
-    
-    func request(_ endpoint: Endpoint, completion: @escaping ((Bool, [Song]?) -> Void)) -> DataRequest {
+    static func request(_ endpoint: Endpoint, completion: @escaping ((Bool, [Song]?) -> Void)) -> DataRequest {
         let url = URL(string: "https://itunes.apple.com/search?country=pl&limit=50&entity=song&media=music&term=\(endpoint.url)")!
         print("request for \(url)")
         switch endpoint {
@@ -87,7 +80,7 @@ extension API: ReactiveCompatible {}
 extension Reactive where Base: API {
     func request(_ endpoint: Endpoint) -> Observable<[Song]> {
         return Observable.create { observer in
-            let request = self.base.request( endpoint, completion: { success, songs in
+            let request = API.request( endpoint, completion: { success, songs in
                 if(success) {
                     observer.onNext(songs!)
                 } else {

@@ -36,7 +36,7 @@ class NoRxITunesViewController: UIViewController, UITableViewDataSource{
     
     func updateTableView(searchText: String) {
         songs.removeAll()
-        _ = api.request(.getSongs(forTerm: searchText)){ success, songs in
+        _ = API.request(.getSongs(forTerm: searchText)){ success, songs in
             if(success) {
                 for song in songs! {
                     self.songs.append(song)

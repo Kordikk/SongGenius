@@ -120,10 +120,6 @@ open class PastelView: UIView {
         self.colors = colors
     }
     
-    public func setPastelGradient(_ gradient: PastelGradient) {
-        setColors(gradient.colors())
-    }
-    
     public func addcolor(_ color: UIColor) {
         self.colors.append(color)
     }

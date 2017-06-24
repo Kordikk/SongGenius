@@ -12,16 +12,14 @@ class LocalSongsViewController: UIViewController, UITableViewDataSource {
     
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var tableView: UITableView!
-    var songs = [Song]()
-    var filtered = [Song]()
-    var searchActive = false
+    let songsManager = SongsManager()
     var sortedByNameAscending = false
     var sortedByArtistAscending = false
     var sortedByReleaseYearAscending = false
 
     override func viewDidLoad() {
+        songsManager.loadSongsFromLocal()
         super.viewDidLoad()
-        songs = DataAccess.access.getSongs()
         tableView.dataSource = self
         searchBar.delegate = self
         tableView.delegate = self
@@ -34,50 +32,35 @@ class LocalSongsViewController: UIViewController, UITableViewDataSource {
     @IBAction func sortBy(_ sender: Any) {
         let alertController = UIAlertController(title: "Filters", message:
             "You can choose one way of sorting songs.", preferredStyle: .alert)
+        
+        //sorting by song's name
         alertController.addAction(UIAlertAction(title: "By name", style: .default, handler: { [unowned self] _ in
             if(self.sortedByNameAscending) {
-                self.songs.sort{$0.name.lowercased() < $1.name.lowercased()}
-            if(self.searchActive) {
-                self.filtered.sort{$0.name.lowercased() < $1.name.lowercased()}
-                }
+                self.songsManager.sort(.byNameDescending)
             } else {
-                self.songs.sort{$0.name.lowercased() > $1.name.lowercased()}
-                if(self.searchActive) {
-                    self.filtered.sort{$0.name.lowercased() > $1.name.lowercased()}
-                }
+                self.songsManager.sort(.byNameAscending)
             }
             self.sortedByNameAscending = !self.sortedByNameAscending
             self.tableView.reloadSections(IndexSet(integer: 0), with: .fade)
         }))
 
+        //sorting by Artist's name
         alertController.addAction(UIAlertAction(title: "By artist", style: .default, handler: { [unowned self] _ in
             if(self.sortedByArtistAscending) {
-            self.songs.sort{$0.artist.lowercased() < $1.artist.lowercased()}
-            if(self.searchActive) {
-                self.filtered.sort{$0.artist.lowercased() < $1.artist.lowercased()}
-                }
+            self.songsManager.sort(.byArtistDescending)
             } else {
-                self.songs.sort{$0.artist.lowercased() > $1.artist.lowercased()}
-                if(self.searchActive) {
-                    self.filtered.sort{$0.artist.lowercased() > $1.artist.lowercased()}
-                }
-
+                self.songsManager.sort(.byArtistAscending)
             }
             self.sortedByArtistAscending = !self.sortedByArtistAscending
             self.tableView.reloadSections(IndexSet(integer: 0), with: .fade)
         }))
         
+        //sorting by releaseYear
         alertController.addAction(UIAlertAction(title: "By year", style: .default, handler: { [unowned self] _ in
             if(self.sortedByReleaseYearAscending) {
-            self.songs.sort{$0.releaseYear < $1.releaseYear}
-            if(self.searchActive) {
-                self.filtered.sort{$0.releaseYear < $1.releaseYear}
-                }
+            self.songsManager.sort(.byReleaseYearDescending)
             } else {
-                self.songs.sort{$0.releaseYear > $1.releaseYear}
-                if(self.searchActive) {
-                    self.filtered.sort{$0.releaseYear > $1.releaseYear}
-                }
+                self.songsManager.sort(.byReleaseYearAscending)
             }
             self.sortedByReleaseYearAscending = !self.sortedByReleaseYearAscending
             self.tableView.reloadSections(IndexSet(integer: 0), with: .fade)
@@ -94,23 +77,14 @@ class LocalSongsViewController: UIViewController, UITableViewDataSource {
 extension LocalSongsViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if(searchActive) {
-            return filtered.count
-        } else {
-            return songs.count
-        }
+        return songsManager.getCount()
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = self.tableView.dequeueReusableCell(withIdentifier: "localSongsCell") as! LocalSongsCell
-        var song: Song?
-        if(!searchActive) {
-            song = songs[indexPath.row]
-        } else {
-            song = filtered[indexPath.row]
-        }
-        cell.title.text = "\(song!.artist) - \(song!.name)"
-        cell.releaseYear.text = song!.releaseYear
+        let song = songsManager.getSong(indexPath.row)
+        cell.title.text = "\(song.artist) - \(song.name)"
+        cell.releaseYear.text = song.releaseYear
         return cell
     }
     
@@ -119,14 +93,9 @@ extension LocalSongsViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        var song: Song?
-        if(!searchActive) {
-            song = songs[indexPath.row]
-        } else {
-            song = filtered[indexPath.row]
-        }
+        let song = songsManager.getSong(indexPath.row)
         let alertController = UIAlertController(title: "Song", message:
-            "You've chosen a song \(song?.primaryKey ?? "") released in \(song?.releaseYear ?? "year only artists knows : (").", preferredStyle: UIAlertControllerStyle.alert)
+            "You've chosen a song \(song.primaryKey) released in \(song.releaseYear == "" ? song.releaseYear : "year only artists knows : (").", preferredStyle: UIAlertControllerStyle.alert)
         alertController.addAction(UIAlertAction(title: "Ok, cool", style: UIAlertActionStyle.default,handler: nil))
         
         self.present(alertController, animated: true, completion: {
@@ -143,30 +112,10 @@ extension LocalSongsViewController: UISearchBarDelegate {
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        filtered = songs.filter{ (song:Song) -> Bool in
-            var searchText = searchText.replacingOccurrences(of: "'", with: "")
-            searchText = searchText.replacingOccurrences(of: "/", with: "")
-            searchText = searchText.replacingOccurrences(of: "!", with: "")
-            searchText = searchText.replacingOccurrences(of: "-", with: "")
-            var name = song.name
-            var artist = song.artist
-            name = name.replacingOccurrences(of: "'", with: "")
-            name = name.replacingOccurrences(of: "!", with: "")
-            name = name.replacingOccurrences(of: "-", with: "")
-            name = name.replacingOccurrences(of: "/", with: "/")
-            artist = artist.replacingOccurrences(of: "-", with: "")
-            artist = artist.replacingOccurrences(of: "!", with: "")
-            artist = artist.replacingOccurrences(of: "/", with: "")
-            artist = artist.replacingOccurrences(of: "'", with: "")
-            let isName = name.lowercased().contains(searchText.lowercased())
-            let isArtist = artist.lowercased().contains(searchText.lowercased())
-            let isYear = song.releaseYear.lowercased().contains(searchText.lowercased())
-            return isName || isArtist || isYear
-        }
-        if(searchText == ""){
-            searchActive = false
+        if(searchText == "") {
+            songsManager.loadSongsFromLocal()
         } else {
-            searchActive = true
+            songsManager.setSongs(searchText)
         }
         self.tableView.reloadSections(IndexSet(integer: 0), with: .fade)
     }

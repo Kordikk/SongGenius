@@ -26,4 +26,13 @@ public class Song: Object {
         self.url = url
     }
     
+    convenience init(song: Song) {
+        self.init()
+        self.name = song.name
+        self.artist = song.artist
+        self.releaseYear = song.releaseYear
+        self.primaryKey = song.primaryKey
+        self.url = song.url
+    }
+    
 }
