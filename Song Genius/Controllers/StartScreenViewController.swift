@@ -8,9 +8,14 @@
 
 import Foundation
 import UIKit
+import Swiftstraints
 
 class StartScreenViewController: UIViewController {
     
+    private let logoImageView = UIImageView(image: UIImage(named: "logo"))
+    private let iTunesButton = UIButton()
+    private let localStorageButton = UIButton()
+    private let betaRxButton = UIButton()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,12 +33,12 @@ class StartScreenViewController: UIViewController {
             UIColor(red: 244/255, green: 143/255, blue: 177/255, alpha: 1.0)
             ])
         pastelView.startAnimation()
+        setUpConstraints()
     }
 
     override func viewDidAppear(_ animated: Bool) {
         (view.subviews[0] as! PastelView).startAnimation()
     }
-    
 
     @IBAction func goToLocalSongsButton(_ sender: Any) {
         performSegue(withIdentifier: "showLocalSongsViewController", sender: sender)
@@ -46,6 +51,63 @@ class StartScreenViewController: UIViewController {
     
     @IBAction func showNoRxITunesViewController(_ sender: Any) {
         performSegue(withIdentifier: "showNoRxITunesViewController", sender: sender)
+    }
+    
+    private func setUpConstraints() {
+        setUpLogoImageViewConstraints()
+        setUpItunesButtonConstraints()
+        setUpLocalStorageButtonConstraints()
+        setUpBetaRxButtonConstraints()
+    }
+    
+    private func setUpLogoImageViewConstraints() {
+        view.addSubview(logoImageView)
+        logoImageView.translatesAutoresizingMaskIntoConstraints = false
+        logoImageView.addConstraint((logoImageView.widthAnchor == 96))
+        logoImageView.addConstraint((logoImageView.heightAnchor == 96))
+        view.addConstraint((logoImageView.topAnchor == topLayoutGuide.bottomAnchor + 26))
+        view.addConstraint((logoImageView.centerXAnchor == view.centerXAnchor))
+    }
+    
+    private func setUpItunesButtonConstraints() {
+        view.addSubview(iTunesButton)
+        iTunesButton.setImage(UIImage(named: "iTunes"), for: .normal)
+        iTunesButton.translatesAutoresizingMaskIntoConstraints = false
+        view.addConstraint((iTunesButton.topAnchor == topLayoutGuide.bottomAnchor + 50))
+        view.addConstraint((iTunesButton.trailingAnchor == logoImageView.leadingAnchor - 32))
+    }
+    
+    private func setUpLocalStorageButtonConstraints() {
+        view.addSubview(localStorageButton)
+        localStorageButton.setImage(UIImage(named: "localStorage"), for: .normal)
+        localStorageButton.addTarget(self, action: #selector(presentLocalStorageViewController), for: .touchUpInside)
+        localStorageButton.translatesAutoresizingMaskIntoConstraints = false
+        view.addConstraint((localStorageButton.topAnchor == topLayoutGuide.bottomAnchor + 50))
+        view.addConstraint((localStorageButton.leadingAnchor == logoImageView.trailingAnchor + 32))
+    }
+    
+    private func setUpBetaRxButtonConstraints() {
+        betaRxButton.setTitle("betaRx", for: .normal)
+        betaRxButton.titleLabel!.adjustsFontSizeToFitWidth = true
+        view.addSubview(betaRxButton)
+        betaRxButton.translatesAutoresizingMaskIntoConstraints = false
+        betaRxButton.addConstraint(betaRxButton.widthAnchor == 33)
+        betaRxButton.addConstraint((betaRxButton.heightAnchor == 11))
+        view.addConstraint((betaRxButton.trailingAnchor == view.trailingAnchor - 16))
+        view.addConstraint((betaRxButton.bottomAnchor == bottomLayoutGuide.topAnchor - 20))
+    }
+    
+    @objc private func presentBetaRxViewController() {
+        Sound.play(file: "xfiles.mp3")
+        present(ITunesSongsViewController(), animated: true, completion: nil)
+    }
+    
+    private func presentITunesViewController() {
+        present(NoRxITunesViewController(), animated: true, completion: nil)
+    }
+    
+    @objc private func presentLocalStorageViewController() {
+        present(LocalSongsViewController(), animated: true, completion: nil)
     }
 
 }
