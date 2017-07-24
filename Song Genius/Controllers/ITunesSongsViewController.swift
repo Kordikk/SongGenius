@@ -23,7 +23,6 @@ class ITunesSongsViewController: UIViewController, UITableViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         setUp() // additional func for tidier viewDidLoad
-        self.tableView.register(ITunesSongsCell.self, forCellReuseIdentifier: "ITunesSongsCell")
     }
     
     func setUp() {
