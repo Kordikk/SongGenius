@@ -22,6 +22,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window!.rootViewController = StartScreenViewController()
         self.window!.makeKeyAndVisible()
         
+        let navigationBarAppearace = UINavigationBar.appearance()
+        
+        navigationBarAppearace.barTintColor = UIColor(red: 243/255, green: 144/255, blue: 177/255, alpha: 1.0)
+        navigationBarAppearace.isTranslucent = false
+        navigationBarAppearace.isOpaque = true
+        
         return true
     }
 

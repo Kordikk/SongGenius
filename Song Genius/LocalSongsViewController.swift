@@ -10,26 +10,39 @@ import UIKit
 
 class LocalSongsViewController: UIViewController, UITableViewDataSource {
     
-    @IBOutlet weak var searchBar: UISearchBar!
-    @IBOutlet weak var tableView: UITableView!
+    let searchBar = UISearchBar()
+    let tableView = UITableView()
     let songsManager = SongsManager()
     var sortedByNameAscending = false
     var sortedByArtistAscending = false
     var sortedByReleaseYearAscending = false
 
     override func viewDidLoad() {
+        view.backgroundColor = UIColor(red: 244/255, green: 143/255, blue: 177/255, alpha: 1.0)
         songsManager.loadSongsFromLocal()
         super.viewDidLoad()
+        setUpConstraints()
         tableView.dataSource = self
         searchBar.delegate = self
         tableView.delegate = self
+        tableView.register(LocalSongsCell.self, forCellReuseIdentifier: "localSongsCell")
+        tableView.rowHeight = 48.0
+        let backButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(goBack(_:)))
+        navigationItem.leftBarButtonItem = backButton
+        let sortButton = UIBarButtonItem(barButtonSystemItem: .organize, target: self, action: #selector(sortBy(_:)))
+        navigationItem.rightBarButtonItem = sortButton
+        automaticallyAdjustsScrollViewInsets = false
+        tableView.contentInset = .zero
+        navigationItem.title = "Local Storage"
+        searchBar.isTranslucent = false
+        searchBar.barTintColor = UIColor(red: 244/177, green: 143/255, blue: 177/255, alpha: 1.0)
     }
-
-    @IBAction func goBack(_ sender: Any) {
+    
+    func goBack(_ sender: Any) {
         dismiss(animated: true, completion: nil)
     }
     
-    @IBAction func sortBy(_ sender: Any) {
+    func sortBy(_ sender: Any) {
         let alertController = UIAlertController(title: "Filters", message:
             "You can choose one way of sorting songs.", preferredStyle: .alert)
         
@@ -72,6 +85,20 @@ class LocalSongsViewController: UIViewController, UITableViewDataSource {
         view.endEditing(true)
     }
     
+    func setUpConstraints() {
+        view.addSubview(tableView)
+        view.addSubview(searchBar)
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        searchBar.translatesAutoresizingMaskIntoConstraints = false
+        searchBar.topAnchor.constraint(equalTo: topLayoutGuide.bottomAnchor).isActive = true
+        searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0).isActive = true
+        searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0).isActive = true
+        tableView.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 0).isActive = true
+        tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0).isActive = true
+        tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0).isActive = true
+    }
+    
 }
 
 
@@ -88,9 +115,13 @@ extension LocalSongsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = self.tableView.dequeueReusableCell(withIdentifier: "localSongsCell") as! LocalSongsCell
         let song = songsManager.getSong(indexPath.row)
-        cell.title.text = "\(song.artist) - \(song.name)"
-        cell.releaseYear.text = song.releaseYear
+        cell.titleLabel.text = "\(song.artist) - \(song.name)"
+        cell.releaseYearLabel.text = song.releaseYear
         return cell
+    }
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
     }
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {

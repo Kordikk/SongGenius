@@ -6,30 +6,56 @@
 //  Copyright © 2017 KordianLedzion. All rights reserved.
 //
 
-import Foundation
 import UIKit
 
 class NoRxITunesViewController: UIViewController, UITableViewDataSource{
     
-    @IBOutlet weak var searchBar: UISearchBar!
-    @IBOutlet weak var tableView: UITableView!
+    let searchBar = UISearchBar()
+    let tableView = UITableView()
     fileprivate var sortedByNameAscending = false
     fileprivate var sortedByArtistAscending = false
     fileprivate var sortedByReleaseYearAscending = false
     fileprivate let songsManager = SongsManager()
     
     override func viewDidLoad() {
+        view.backgroundColor = UIColor(red: 244/255, green: 143/255, blue: 177/255, alpha: 1.0)
         super.viewDidLoad()
+        setUpConstraints()
         tableView.dataSource = self
         searchBar.delegate = self
         tableView.delegate = self
+        tableView.register(LocalSongsCell.self, forCellReuseIdentifier: "iTunesSongCell")
+        tableView.rowHeight = 48.0
+        let backButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(goBack(_:)))
+        navigationItem.leftBarButtonItem = backButton
+        let sortButton = UIBarButtonItem(barButtonSystemItem: .organize, target: self, action: #selector(sortBy(_:)))
+        navigationItem.rightBarButtonItem = sortButton
+        automaticallyAdjustsScrollViewInsets = false
+        tableView.contentInset = .zero
+        navigationItem.title = "iTunes songs"
+        searchBar.isTranslucent = false
+        searchBar.barTintColor = UIColor(red: 244/177, green: 143/255, blue: 177/255, alpha: 1.0)
+    }
+    
+    func setUpConstraints() {
+        view.addSubview(tableView)
+        view.addSubview(searchBar)
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        searchBar.translatesAutoresizingMaskIntoConstraints = false
+        searchBar.topAnchor.constraint(equalTo: topLayoutGuide.bottomAnchor).isActive = true
+        searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0).isActive = true
+        searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0).isActive = true
+        tableView.topAnchor.constraint(equalTo: searchBar.bottomAnchor, constant: 0).isActive = true
+        tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0).isActive = true
+        tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0).isActive = true
     }
     
     func dismissKeyboard(){
         view.endEditing(true)
     }
     
-    @IBAction func goBack(_ sender: Any) {
+    func goBack(_ sender: Any) {
         dismiss(animated: true, completion: nil)
     }
     
@@ -46,7 +72,7 @@ class NoRxITunesViewController: UIViewController, UITableViewDataSource{
         }
     }
     
-    @IBAction func sortBy(_ sender: Any) {
+    func sortBy(_ sender: Any) {
         let alertController = UIAlertController(title: "Filters", message:
             "You can choose one way of sorting songs.", preferredStyle: .alert)
         alertController.addAction(UIAlertAction(title: "By name", style: .default, handler: { [unowned self] _ in
@@ -90,10 +116,10 @@ extension NoRxITunesViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = self.tableView.dequeueReusableCell(withIdentifier: "noRxITunesSongCell") as! NoRxITunesSongsCell
+        let cell = self.tableView.dequeueReusableCell(withIdentifier: "iTunesSongCell") as! LocalSongsCell
         let song = songsManager.getSong(indexPath.row)
-        cell.title.text = "\(song.artist) - \(song.name)"
-        cell.releaseYear.text = song.releaseYear
+        cell.titleLabel.text = "\(song.artist) - \(song.name)"
+        cell.releaseYearLabel.text = song.releaseYear
         return cell
     }
     
